@@ -1549,7 +1549,7 @@ class Quart(PackageStatic):
         """
         return WebsocketContext(self, websocket)
 
-    def run(
+    async def run(
         self,
         host: str = "127.0.0.1",
         port: int = 5000,
@@ -1617,15 +1617,15 @@ class Quart(PackageStatic):
         scheme = "https" if certfile is not None and keyfile is not None else "http"
         print(f"Running on {scheme}://{host}:{port} (CTRL + C to quit)")  # noqa: T001, T002
 
-        try:
-            loop.run_until_complete(task)
-        finally:
-            try:
-                _cancel_all_tasks(loop)
-                loop.run_until_complete(loop.shutdown_asyncgens())
-            finally:
-                asyncio.set_event_loop(None)
-                loop.close()
+
+        loop.create_task(task)
+        #finally:
+            #try:
+                #_cancel_all_tasks(loop)
+                #loop.run_until_complete(loop.shutdown_asyncgens())
+            #finally:
+                #asyncio.set_event_loop(None)
+                #loop.close()
 
     def run_task(
         self,
